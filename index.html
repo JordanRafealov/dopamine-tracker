@@ -6,46 +6,56 @@
 <title>Dopamine Digital — Project Tracker</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
 :root{
-  --bg-deep:#07060e;
-  --bg-base:#0d0a1a;
-  --bg-surface:#130f28;
-  --bg-column:#110e24;
-  --bg-card:#1a1538;
-  --bg-card-hover:#211b45;
-  --bg-card-border:#2a2255;
-  --bg-input:#15112e;
-  --border:#251f4a;
-  --border-glow:#7c3aed44;
-  --text-primary:#e8e4f5;
-  --text-secondary:#9d95b8;
-  --text-muted:#6b6188;
-  --text-dim:#4a4268;
+  --bg-deep:#101016;
+  --bg-base:#16161e;
+  --bg-surface:#1c1c26;
+  --bg-card:#222230;
+  --bg-card-hover:#2a2a3a;
+  --bg-card-border:#333346;
+  --bg-input:#1a1a24;
+  --border:#2a2a3a;
+  --border-glow:#7c3aed22;
+  --text-primary:#e4e2ec;
+  --text-secondary:#a09cb5;
+  --text-muted:#706c85;
+  --text-dim:#504c65;
   --purple:#7c3aed;
   --purple-light:#a78bfa;
   --purple-bright:#8b5cf6;
   --purple-dark:#5b21b6;
-  --purple-glow:#7c3aed33;
-  --purple-glow-strong:#7c3aed55;
+  --purple-glow:#7c3aed22;
+  --purple-glow-strong:#7c3aed33;
   --cat-automation:#a855f7;
   --cat-kpi:#34d399;
   --cat-project:#22d3ee;
   --priority-high:#ef4444;
   --priority-med:#f59e0b;
   --priority-low:#22c55e;
-  --shadow-card:0 2px 8px rgba(7,6,14,.6), 0 1px 3px rgba(7,6,14,.4);
-  --shadow-card-hover:0 8px 32px rgba(124,58,237,.15), 0 2px 12px rgba(7,6,14,.5);
-  --shadow-drag:0 20px 60px rgba(124,58,237,.25), 0 4px 16px rgba(7,6,14,.6);
+  --shadow-card:0 2px 6px rgba(0,0,0,.3), 0 1px 2px rgba(0,0,0,.2);
+  --shadow-card-hover:0 6px 20px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.25);
+  --shadow-drag:0 16px 48px rgba(0,0,0,.4), 0 4px 12px rgba(0,0,0,.3);
+  /* Column tints */
+  --col-backlog:#1b1b25;
+  --col-thisweek:#1a1c28;
+  --col-inprogress:#1c1b22;
+  --col-inreview:#1b1a26;
+  --col-live:#1a1d24;
+  --col-backlog-accent:#706c85;
+  --col-thisweek-accent:#5b8af5;
+  --col-inprogress-accent:#e8a838;
+  --col-inreview-accent:#a078e8;
+  --col-live-accent:#3ecf8e;
   --radius:10px;
   --radius-sm:6px;
   --radius-lg:14px;
   --radius-xl:18px;
-  --font-heading:'Sora',sans-serif;
-  --font-body:'Instrument Sans',system-ui,sans-serif;
+  --font-heading:'JetBrains Mono',monospace;
+  --font-body:'DM Sans',system-ui,sans-serif;
   --ease:cubic-bezier(.4,0,.2,1);
   --ease-spring:cubic-bezier(.34,1.56,.64,1);
   --transition:200ms var(--ease);
@@ -54,39 +64,22 @@
 html{font-size:14px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
 body{font-family:var(--font-body);background:var(--bg-deep);color:var(--text-primary);overflow-x:auto;min-height:100vh;display:flex;flex-direction:column;position:relative}
 
-/* === ANIMATED BACKGROUND === */
+/* === SUBTLE BACKGROUND === */
 body::before{
   content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
-  background:
-    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(124,58,237,.08) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 80% at 80% 90%, rgba(139,92,246,.06) 0%, transparent 50%),
-    radial-gradient(ellipse 40% 40% at 50% 50%, rgba(91,33,182,.04) 0%, transparent 40%);
-}
-body::after{
-  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.03;
-  background-image:url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 30h60M30 0v60' stroke='%237c3aed' stroke-width='.5' fill='none'/%3E%3C/svg%3E");
-  background-size:60px 60px;
+  background:radial-gradient(ellipse 80% 50% at 50% 0%, rgba(124,58,237,.03) 0%, transparent 60%);
 }
 
 /* === HEADER === */
 .header{
   padding:18px 28px 0;position:sticky;top:0;z-index:100;
-  background:linear-gradient(180deg, rgba(13,10,26,.98) 0%, rgba(13,10,26,.95) 80%, rgba(13,10,26,.85) 100%);
-  backdrop-filter:blur(20px);border-bottom:1px solid var(--border);
-  position:relative;z-index:100;
-}
-.header::after{
-  content:"";position:absolute;bottom:-1px;left:0;right:0;height:1px;
-  background:linear-gradient(90deg, transparent 0%, var(--purple) 30%, var(--purple-bright) 50%, var(--purple) 70%, transparent 100%);
-  opacity:.4;
+  background:rgba(16,16,22,.97);
+  backdrop-filter:blur(16px);border-bottom:1px solid var(--border);
 }
 .header-top{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
 .brand{display:flex;align-items:baseline;gap:14px}
-.brand h1{font-family:var(--font-heading);font-size:1.2rem;font-weight:800;letter-spacing:-.03em}
-.brand h1 .dd{
-  background:linear-gradient(135deg, var(--purple-light) 0%, var(--purple) 50%, var(--purple-bright) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
+.brand h1{font-family:var(--font-heading);font-size:1.1rem;font-weight:700;letter-spacing:-.02em}
+.brand h1 .dd{color:var(--purple-light)}
 .brand .sep{color:var(--text-dim);margin:0 2px;font-weight:400}
 .brand .subtitle{font-family:var(--font-heading);font-size:.82rem;font-weight:500;color:var(--text-muted);letter-spacing:.02em}
 
@@ -124,8 +117,8 @@ body::after{
 .board-tab:hover{color:var(--text-secondary)}
 .board-tab.active{color:var(--purple-light);border-bottom-color:var(--purple)}
 .board-tab.active::after{
-  content:"";position:absolute;bottom:-2px;left:20%;right:20%;height:2px;
-  background:var(--purple);filter:blur(4px);
+  content:"";position:absolute;bottom:-2px;left:30%;right:30%;height:1px;
+  background:var(--purple-light);filter:blur(3px);opacity:.5;
 }
 .board-tab .tab-count{font-size:.68rem;opacity:.5;margin-left:6px;font-weight:400}
 
@@ -149,22 +142,37 @@ body::after{
 /* === COLUMNS === */
 .column{
   min-width:280px;max-width:300px;flex:1;
-  background:var(--bg-column);border:1px solid var(--border);
+  background:var(--col-backlog);border:1px solid var(--border);
   border-radius:var(--radius-lg);display:flex;flex-direction:column;
   position:relative;overflow:hidden;
 }
+.column[data-column="backlog"]{background:var(--col-backlog)}
+.column[data-column="thisweek"]{background:var(--col-thisweek)}
+.column[data-column="inprogress"]{background:var(--col-inprogress)}
+.column[data-column="inreview"]{background:var(--col-inreview)}
+.column[data-column="live"]{background:var(--col-live)}
 .column::before{
   content:"";position:absolute;top:0;left:0;right:0;height:3px;
-  background:linear-gradient(90deg, transparent, var(--purple), transparent);opacity:.2;
+  background:var(--col-backlog-accent);opacity:.35;
 }
+.column[data-column="backlog"]::before{background:var(--col-backlog-accent)}
+.column[data-column="thisweek"]::before{background:var(--col-thisweek-accent)}
+.column[data-column="inprogress"]::before{background:var(--col-inprogress-accent)}
+.column[data-column="inreview"]::before{background:var(--col-inreview-accent)}
+.column[data-column="live"]::before{background:var(--col-live-accent)}
 .column-header{
   padding:16px 16px 12px;display:flex;align-items:center;justify-content:space-between;
-  border-bottom:1px solid rgba(37,31,74,.5);
+  border-bottom:1px solid rgba(42,42,58,.6);
 }
-.column-title{font-family:var(--font-heading);font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--text-secondary)}
+.column-title{font-family:var(--font-heading);font-size:.72rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--text-secondary)}
+.column[data-column="backlog"] .column-title{color:var(--col-backlog-accent)}
+.column[data-column="thisweek"] .column-title{color:var(--col-thisweek-accent)}
+.column[data-column="inprogress"] .column-title{color:var(--col-inprogress-accent)}
+.column[data-column="inreview"] .column-title{color:var(--col-inreview-accent)}
+.column[data-column="live"] .column-title{color:var(--col-live-accent)}
 .column-count{
-  font-family:var(--font-heading);font-size:.68rem;font-weight:600;color:var(--text-dim);
-  background:var(--bg-surface);padding:2px 8px;border-radius:20px;
+  font-family:var(--font-heading);font-size:.65rem;font-weight:600;color:var(--text-dim);
+  background:rgba(255,255,255,.04);padding:2px 8px;border-radius:20px;
   border:1px solid var(--border);
 }
 .column-body{flex:1;padding:8px 10px;overflow-y:auto;min-height:60px}
@@ -176,15 +184,21 @@ body::after{
   border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;
   cursor:grab;transition:all 250ms var(--ease);position:relative;
   animation:cardIn 400ms var(--ease-spring) both;
+  border-left:3px solid transparent;
 }
 .card:hover{
-  background:var(--bg-card-hover);border-color:var(--purple);
+  background:var(--bg-card-hover);border-color:var(--bg-card-border);
+  border-left-color:var(--purple-light);
   box-shadow:var(--shadow-card-hover);transform:translateY(-1px);
 }
 .card.dragging{
-  opacity:.85;transform:rotate(1.5deg) scale(1.03);
-  box-shadow:var(--shadow-drag);border-color:var(--purple-bright);z-index:1000;cursor:grabbing;
+  opacity:.9;transform:rotate(1deg) scale(1.02);
+  box-shadow:var(--shadow-drag);border-left-color:var(--purple);z-index:1000;cursor:grabbing;
 }
+/* Category-tinted left border */
+.card[data-cat="Automation"]{border-left-color:rgba(168,85,247,.35)}
+.card[data-cat="KPI"]{border-left-color:rgba(52,211,153,.35)}
+.card[data-cat="Project"]{border-left-color:rgba(34,211,238,.35)}
 @keyframes cardIn{
   from{opacity:0;transform:translateY(12px) scale(.97)}
   to{opacity:1;transform:translateY(0) scale(1)}
@@ -213,9 +227,9 @@ body::after{
 .card-owner{
   width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;
   font-family:var(--font-heading);font-size:.55rem;font-weight:700;letter-spacing:.02em;
-  border:1.5px solid var(--purple);color:var(--purple-light);background:rgba(124,58,237,.12);
+  border:1.5px solid var(--text-muted);color:var(--text-secondary);background:rgba(255,255,255,.04);
 }
-.card-owner.angela{border-color:var(--cat-kpi);color:var(--cat-kpi);background:rgba(52,211,153,.1)}
+.card-owner.angela{border-color:var(--cat-kpi);color:var(--cat-kpi);background:rgba(52,211,153,.06)}
 
 .card-desc{font-size:.76rem;color:var(--text-secondary);line-height:1.55;margin-bottom:8px}
 
@@ -225,7 +239,7 @@ body::after{
   font-family:var(--font-heading);font-size:.65rem;font-weight:600;color:var(--purple-light);
   text-decoration:none;transition:all var(--transition);display:inline-flex;align-items:center;gap:3px;
 }
-.card-link:hover{color:#fff;text-shadow:0 0 8px var(--purple-glow-strong)}
+.card-link:hover{color:var(--text-primary)}
 .card-link svg{width:10px;height:10px}
 
 /* === ADD CARD BUTTON === */
@@ -249,12 +263,12 @@ body::after{
   background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius-xl);
   padding:32px;width:90%;max-width:520px;transform:translateY(20px) scale(.96);
   transition:transform 300ms var(--ease-spring);position:relative;
-  box-shadow:0 40px 80px rgba(0,0,0,.5), 0 0 60px var(--purple-glow);
+  box-shadow:0 40px 80px rgba(0,0,0,.5);
 }
 .modal-overlay.open .modal{transform:translateY(0) scale(1)}
 .modal::before{
-  content:"";position:absolute;top:-1px;left:20%;right:20%;height:2px;
-  background:linear-gradient(90deg, transparent, var(--purple), transparent);border-radius:2px;
+  content:"";position:absolute;top:-1px;left:30%;right:30%;height:2px;
+  background:linear-gradient(90deg, transparent, var(--purple-light), transparent);border-radius:2px;opacity:.4;
 }
 .modal h2{font-family:var(--font-heading);font-size:1.1rem;font-weight:700;margin-bottom:24px;color:var(--text-primary)}
 .modal-close{
@@ -360,8 +374,8 @@ body::after{
 /* === TOAST === */
 .toast{
   position:fixed;bottom:24px;right:24px;z-index:10001;
-  background:var(--bg-surface);border:1px solid var(--purple);border-radius:var(--radius);
-  padding:12px 20px;font-family:var(--font-heading);font-size:.78rem;color:var(--purple-light);
+  background:var(--bg-surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:12px 20px;font-family:var(--font-heading);font-size:.78rem;color:var(--text-primary);
   box-shadow:0 8px 32px rgba(0,0,0,.4);transform:translateY(100px);opacity:0;
   transition:all 300ms var(--ease-spring);
 }
@@ -505,7 +519,7 @@ body::after{
 const COLUMNS = ['backlog','thisweek','inprogress','inreview','live'];
 const COL_LABELS = {backlog:'Backlog',thisweek:'This Week',inprogress:'In Progress',inreview:'In Review',live:'Live'};
 const BOARDS = ['jordan','angela'];
-const STORAGE_PREFIX = 'dd-tracker-';
+const STORAGE_PREFIX = 'dd-tracker-v2-';
 
 // ========== DEFAULT DATA ==========
 const DEFAULT_JORDAN = {
@@ -529,7 +543,7 @@ const DEFAULT_JORDAN = {
   live:[
     {id:_id(),title:"YouTube Lead Response Automation",category:"Automation",owner:"Jordan",priority:"high",description:"v1.1 LIVE. 36-node n8n workflow. TypeForm \u2192 AI qualification \u2192 ClickUp/ActiveCampaign/Slack. All 3 paths tested.",link:"https://github.com/JordanRafealov/youtube-lead-response",dueDate:""},
     {id:_id(),title:"Cooper Bot (OpenClaw)",category:"Project",owner:"Jordan",priority:"high",description:"AI assistant on Mac Mini. Morning messages, daily backup cron, Slack/Telegram escalation. Fully operational.",link:"https://github.com/JordanRafealov/cooper-brain",dueDate:""},
-    {id:_id(),title:"StudyApp \u2014 MSK PT Quiz",category:"Project",owner:"Jordan",priority:"low",description:"Single-file HTML quiz app for Nephisa. Flashcards, multiple choice, progress tracking. Deployed on GitHub Pages.",link:"https://github.com/JordanRafealov/Study",dueDate:""},
+    {id:_id(),title:"StudyApp \u2014 Learning Quiz",category:"Project",owner:"Jordan",priority:"low",description:"Single-file HTML quiz app. Flashcards, multiple choice, progress tracking. Deployed on GitHub Pages (private repo).",link:"",dueDate:""},
     {id:_id(),title:"Hubstaff Tracking Report",category:"Automation",owner:"Jordan",priority:"medium",description:"Daily Slack report to #team-logs. Hours + activity % per team member. Runs 1 AM Bangkok Tue-Sat.",link:"",dueDate:""},
     {id:_id(),title:"ClickUp Task Reminders",category:"Automation",owner:"Jordan",priority:"medium",description:"3x daily Slack reminders. Jordan overview at 9 AM, Sophia at 10 AM, Angela/Filip/Rodney at 3 PM. Board links.",link:"",dueDate:""},
     {id:_id(),title:"YouTube Leads Telegram Monitor",category:"Automation",owner:"Jordan",priority:"high",description:"Runs every 2 min. Monitors #youtube-leads channel, sends Telegram alert for qualified/needs-clarification leads.",link:"",dueDate:""}
@@ -554,7 +568,6 @@ const DEFAULT_ANGELA = {
   ],
   inreview:[],
   live:[
-    {id:_id(),title:"YouTube Lead Response Automation",category:"Automation",owner:"Angela",priority:"high",description:"v1.1 LIVE. 36-node n8n workflow. TypeForm \u2192 AI qualification \u2192 ClickUp/ActiveCampaign/Slack.",link:"https://github.com/JordanRafealov/youtube-lead-response",dueDate:""},
     {id:_id(),title:"Daily Operations Scanner",category:"KPI",owner:"Angela",priority:"high",description:"28-node n8n workflow. Scans stale ClickUp tasks, Instantly send volume, stuck podcast guests. Posts to #kpi-reports daily.",link:"",dueDate:""},
     {id:_id(),title:"Podcast Reschedule Automation",category:"Automation",owner:"Angela",priority:"medium",description:"27-node n8n workflow. 3-touch email sequence for stuck guests. Tracks in Google Sheet, marks cold after 10 days.",link:"",dueDate:""}
   ]
@@ -651,7 +664,7 @@ function renderCard(c, delay){
   const dateStr = c.dueDate ? formatDate(c.dueDate) : '';
   const linkHtml = c.link ? `<a class="card-link" href="${esc(c.link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg></a>` : '';
 
-  return `<div class="card" draggable="true" data-id="${c.id}" style="animation-delay:${delay * 40}ms" ondblclick="window._editCard('${c.id}')">
+  return `<div class="card" draggable="true" data-id="${c.id}" data-cat="${esc(c.category)}" style="animation-delay:${delay * 40}ms" ondblclick="window._editCard('${c.id}')">
     <div class="card-top">
       <div class="card-title">${esc(c.title)}</div>
       <div class="card-priority ${c.priority}" title="${c.priority} priority"></div>
