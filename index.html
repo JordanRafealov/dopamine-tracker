@@ -380,6 +380,18 @@ body::before{
   transition:all 300ms var(--ease-spring);
 }
 .toast.show{transform:translateY(0);opacity:1}
+
+/* === HELP MODAL === */
+.help-modal{max-width:560px;max-height:80vh;overflow-y:auto}
+.help-modal h2{margin-bottom:16px}
+.help-content{font-size:.84rem;line-height:1.65;color:var(--text-secondary)}
+.help-intro{margin-bottom:18px;font-size:.88rem;color:var(--text-primary)}
+.help-section{margin-bottom:16px}
+.help-section h3{font-family:var(--font-heading);font-size:.82rem;font-weight:700;color:var(--purple-light);margin-bottom:6px;letter-spacing:.02em}
+.help-section ol,.help-section ul{padding-left:20px;margin:6px 0}
+.help-section li{margin-bottom:4px}
+.help-section code{background:var(--bg-card);padding:2px 6px;border-radius:4px;font-size:.76rem;color:var(--purple-light)}
+.help-section p{margin-bottom:6px}
 </style>
 </head>
 <body>
@@ -395,6 +407,10 @@ body::before{
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><line x1="15.5" y1="15.5" x2="21" y2="21"/></svg>
         <input type="text" class="search-box" id="searchBox" placeholder="Search projects...">
       </div>
+      <button class="toolbar-btn" id="btnHelp" title="How to use this board">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        <span>Guide</span>
+      </button>
       <button class="toolbar-btn" id="btnExport">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/></svg>
         <span>Export</span>
@@ -505,6 +521,68 @@ body::before{
     <div class="confirm-actions">
       <button class="btn btn-ghost" id="confirmNo">Cancel</button>
       <button class="btn btn-danger" id="confirmYes">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- HELP MODAL -->
+<div class="modal-overlay" id="helpOverlay">
+  <div class="modal help-modal">
+    <button class="modal-close" id="helpClose">&times;</button>
+    <h2>How to Use This Board</h2>
+    <div class="help-content">
+      <p class="help-intro">This is the <strong>single source of truth</strong> for all Claude Code projects at Dopamine Digital. It updates in real-time in your browser.</p>
+
+      <div class="help-section">
+        <h3>Adding a project</h3>
+        <ol>
+          <li>Click the <strong>+ Add</strong> button at the bottom of any column</li>
+          <li>Fill in the title, category, priority, and description</li>
+          <li>Set yourself as the owner and add a due date if applicable</li>
+          <li>Add a link to the GitHub repo, Notion page, or Google Doc</li>
+          <li>Click <strong>Save</strong></li>
+        </ol>
+      </div>
+
+      <div class="help-section">
+        <h3>Moving projects through stages</h3>
+        <p><strong>Drag and drop</strong> cards between columns as work progresses:</p>
+        <ul>
+          <li><strong>Backlog</strong> &mdash; planned but not started</li>
+          <li><strong>This Week</strong> &mdash; committed to ship this week</li>
+          <li><strong>In Progress</strong> &mdash; actively being worked on</li>
+          <li><strong>In Review</strong> &mdash; built, waiting for someone else to test/import/verify</li>
+          <li><strong>Live</strong> &mdash; shipped and operational</li>
+        </ul>
+      </div>
+
+      <div class="help-section">
+        <h3>Editing &amp; deleting</h3>
+        <p><strong>Double-click</strong> any card to edit it. You can update the title, description, status, or delete it entirely.</p>
+      </div>
+
+      <div class="help-section">
+        <h3>Switching boards</h3>
+        <p>Use the <strong>Jordan / Angela</strong> tabs at the top. Each person has their own board. You can see what the other person is working on by clicking their tab.</p>
+      </div>
+
+      <div class="help-section">
+        <h3>Filters &amp; search</h3>
+        <p>Use the <strong>Category</strong> and <strong>Owner</strong> dropdowns to filter cards. The search box searches titles and descriptions.</p>
+      </div>
+
+      <div class="help-section">
+        <h3>Export &amp; import</h3>
+        <p><strong>Export</strong> saves the current board as a JSON file (backup). <strong>Import</strong> loads a previously exported file. Your data is saved automatically in your browser.</p>
+      </div>
+
+      <div class="help-section">
+        <h3>Quick links</h3>
+        <ul>
+          <li><strong>Angela's board:</strong> <code>jordanrafealov.github.io/dopamine-tracker/#angela</code></li>
+          <li><strong>Jordan's board:</strong> <code>jordanrafealov.github.io/dopamine-tracker/#jordan</code></li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
@@ -730,6 +808,11 @@ function bindEvents(){
   // Confirm
   document.getElementById('confirmNo').addEventListener('click', closeConfirm);
 
+  // Help
+  document.getElementById('btnHelp').addEventListener('click', () => document.getElementById('helpOverlay').classList.add('open'));
+  document.getElementById('helpClose').addEventListener('click', () => document.getElementById('helpOverlay').classList.remove('open'));
+  document.getElementById('helpOverlay').addEventListener('click', e => { if(e.target === e.currentTarget) document.getElementById('helpOverlay').classList.remove('open') });
+
   // Export / Import
   document.getElementById('btnExport').addEventListener('click', onExport);
   document.getElementById('btnImport').addEventListener('click', () => document.getElementById('importFile').click());
@@ -737,7 +820,7 @@ function bindEvents(){
 
   // Keyboard
   document.addEventListener('keydown', e => {
-    if(e.key === 'Escape'){ closeModal(); closeConfirm(); }
+    if(e.key === 'Escape'){ closeModal(); closeConfirm(); document.getElementById('helpOverlay').classList.remove('open'); }
   });
 }
 
