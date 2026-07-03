@@ -1,0 +1,12 @@
+# Never commit unencrypted source
+index.original.html
+*.source.html
+.src.html
+password-template.html
+sync.sh
+.env
+config.json
+credentials.*
+*.key
+*.pem
+.staticrypt.json
